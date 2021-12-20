@@ -121,10 +121,10 @@ float4 PS(GeoOut input) : SV_TARGET
 {	
 	float4 textureColor;
 
-	//Show the texture (Sample it):
+	//Show the texture:
 	textureColor = shaderTexture.Sample(SampleType, input.tex);
 
-	//Or show a solid color:
+	//Or show solid color:
 	//textureColor.r = 1.0;
 	//textureColor.g = 1.0;
 	//textureColor.b = 1.0;
