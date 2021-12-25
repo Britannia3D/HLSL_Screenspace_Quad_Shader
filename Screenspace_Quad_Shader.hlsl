@@ -46,7 +46,7 @@ void GS(point VertexOut2 input[1], inout TriangleStream<GeoOut> OutputStream)
 	float2 topRight = {1.0, 1.0};
 	float2 topLeft = {-1.0, 1.0};
 	float2 bottomRight = {1.0, -1.0};
-	float2 bottomLeft =	{-1.0, -1.0};
+	float2 bottomLeft = {-1.0, -1.0};
 
 	//Upload the coordinates to the quad
 
@@ -92,7 +92,7 @@ void GS(point VertexOut2 input[1], inout TriangleStream<GeoOut> OutputStream)
 	OutputStream.Append(gout4);
 
 	/*
-	//Display a texture UVs corrected
+	//Texture UVs corrected for correct display
 
 		GeoOut gout1;
 		gout1.PosH = v1;// mul(v1, worldViewProj);//v1;
