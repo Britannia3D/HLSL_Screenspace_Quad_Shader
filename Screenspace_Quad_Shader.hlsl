@@ -11,6 +11,7 @@ cbuffer MatrixBuffer : register(b7)
 	matrix worldMatrix;
 	matrix viewMatrix;
 	matrix projectionMatrix;
+	matrix gViewProj;
 };
 
 struct GeoOut
@@ -35,7 +36,6 @@ VertexOut2 VS(VertexIn3 input)
 	return output;
 }
 
-//[Geometry shader]
 [maxvertexcount(6)]
 void GS(point VertexOut2 input[1], inout TriangleStream<GeoOut> OutputStream)
 {
@@ -43,17 +43,24 @@ void GS(point VertexOut2 input[1], inout TriangleStream<GeoOut> OutputStream)
 
 	//The quad currently fills the viewport
 
+	float2 topRight = {1.0, 1.0};
+	float2 topLeft = {-1.0, 1.0};
+	float2 bottomRight = {1.0, -1.0};
+	float2 bottomLeft =	{-1.0, -1.0};
+
+	//Upload the coordinates to the quad
+
 	float4 v1;
-	v1.x = -1.0; v1.y = 1.0; v1.z = 0.0; v1.w = 1.0;
+	v1.x = topLeft.x; v1.y = topLeft.y; v1.z = 0.0; v1.w = 1.0;
 	
 	float4 v2;//Upper 1
-	v2.x = 1.0; v2.y = 1.0; v2.z = 0.0; v2.w = 1.0;
+	v2.x = topRight.x; v2.y = topRight.y; v2.z = 0.0; v2.w = 1.0;
 	
 	float4 v3;
-	v3.x = -1.0; v3.y = -1.0; v3.z = 0.0; v3.w = 1.0;
+	v3.x = bottomLeft.x; v3.y = bottomLeft.y; v3.z = 0.0; v3.w = 1.0;
 	
 	float4 v4;//Lower 1
-	v4.x = 1.0; v4.y = -1.0; v4.z = 0.0; v4.w = 1.0;
+	v4.x = bottomRight.x; v4.y = bottomRight.y; v4.z = 0.0; v4.w = 1.0;
 
 	float4x4 worldViewProj = mul(worldMatrix, mul(viewMatrix, projectionMatrix));
 
@@ -85,7 +92,7 @@ void GS(point VertexOut2 input[1], inout TriangleStream<GeoOut> OutputStream)
 	OutputStream.Append(gout4);
 
 	/*
-	//(Adjust texture UVs to get correct orientation)
+	//Display a texture UVs corrected
 
 		GeoOut gout1;
 		gout1.PosH = v1;// mul(v1, worldViewProj);//v1;
@@ -124,7 +131,7 @@ float4 PS(GeoOut input) : SV_TARGET
 	//Show the texture:
 	textureColor = shaderTexture.Sample(SampleType, input.tex);
 
-	//Or show solid color:
+	//Or show a solid color:
 	//textureColor.r = 1.0;
 	//textureColor.g = 1.0;
 	//textureColor.b = 1.0;
